@@ -1,5 +1,7 @@
 package com.tirmizee.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -10,11 +12,19 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.tirmizee.config.properties.LdapProperty;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true, securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+	@Value("${ldap.enabled}")
+	private boolean ldapEnabled;
+	
+	@Autowired
+	private LdapProperty ldapProperty;
+	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -40,23 +50,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder authBuilder) throws Exception {
-		
-//		if(Boolean.parseBoolean(ldapEnabled)) {
-//			auth
-//				.ldapAuthentication()
-//				.contextSource()
-//					.url(ldapUrls + ldapBaseDn)
-//						.managerDn(ldapSecurityPrincipal)
-//						.managerPassword(ldapPrincipalPassword)
-//					.and()
-//						.userDnPatterns(ldapUserDnPattern);
-//		} else {
-		authBuilder
-	        .inMemoryAuthentication()
-	            .withUser("user").password("{noop}password").roles("USER").and()
-	            .withUser("admin").password("{noop}password").roles("ADMIN").and()
-	            .withUser("tirmizee").password("{noop}password").roles("ADMIN");
-//		}
+		if(ldapEnabled) {
+			authBuilder
+				.ldapAuthentication()
+				.contextSource()
+					.url(ldapProperty.getUrl() + ldapProperty.getBaseDn())
+						.managerDn(ldapProperty.getUsername())
+						.managerPassword(ldapProperty.getPassword())
+					.and()
+						.userDnPatterns(ldapProperty.getBaseDnPattern());
+		} else {
+			authBuilder
+		        .inMemoryAuthentication()
+		            .withUser("user").password("{noop}password").roles("USER").and()
+		            .withUser("admin").password("{noop}password").roles("ADMIN").and()
+		            .withUser("tirmizee").password("{noop}password").roles("ADMIN");
+		}
 	}
 	
 }
