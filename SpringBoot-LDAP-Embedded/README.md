@@ -13,7 +13,8 @@
 - ou
 
 		organizational unit
-		This refers to the organizational unit (or sometimes the user group) that the user is part of. If the user is part of more than one group, you may specify as such, e.g., OU= Lawyer,OU= Judge.
+		This refers to the organizational unit (or sometimes the user group) that the user is part of. If the user is part of more than one group,
+		you may specify as such, e.g., OU= Lawyer,OU= Judge.
 
 - cn
 
