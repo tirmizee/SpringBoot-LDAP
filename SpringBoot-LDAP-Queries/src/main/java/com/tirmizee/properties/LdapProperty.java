@@ -1,4 +1,4 @@
-package com.tirmizee.config.properties;
+package com.tirmizee.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
