@@ -5,11 +5,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import lombok.Data;
 
 @Data
-@ConfigurationProperties("ldap")
+@ConfigurationProperties("spring.ldap")
 public class LdapProperty {
 	
-	private String url;
-	private String baseDn;
+	private String urls;
+	private String base;
 	private String baseDnPattern;
 	private String username;
 	private String password;

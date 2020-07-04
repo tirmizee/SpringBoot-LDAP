@@ -1,5 +1,6 @@
 package com.tirmizee.config;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.ldap.core.LdapTemplate;
@@ -10,14 +11,9 @@ import org.springframework.ldap.pool.factory.PoolingContextSource;
 public class LdapConfig {
 	
 	@Bean
+	@ConfigurationProperties(value = "spring.ldap")
 	public LdapContextSource contextSource() {
-	    LdapContextSource contextSource = new LdapContextSource();
-	    contextSource.setPooled(true);
-//	    contextSource.setUrl(url);
-//	    contextSource.setBase(base);
-//	    contextSource.setUserDn(userDn);
-//	    contextSource.setPassword(password);
-	    return contextSource;
+	    return new LdapContextSource();
 	}
 	
 	@Bean
